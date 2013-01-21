@@ -172,6 +172,14 @@ $("#list1").jqGrid({
             {name:'priority',label:'Priority',width:20,editable:false,sortable:false},
             {name:'content',label:'Message',editable:false,sortable:false}
         ],
+        loadComplete: function (gridData) {
+            $("#jqgh_list1_datetime_str").css("cursor", "default");
+            $("#jqgh_list1_host_raw").css("cursor", "default");
+            $("#jqgh_list1_file").css("cursor", "default");
+            $("#jqgh_list1_facility").css("cursor", "default");
+            $("#jqgh_list1_priority").css("cursor", "default");
+            $("#jqgh_list1_content").css("cursor", "default");
+        },
         recreateForm: true,
         altRows: true,
         rownumbers: true,
