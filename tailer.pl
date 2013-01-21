@@ -1,6 +1,7 @@
 use Mojolicious::Lite;  
 use Mojo::IOLoop;
 use Mojo::JSON;
+use Mojo::Util qw(slurp);
 use FindBin qw($Bin);
 use lib "$Bin/lib";
 use File::Path;
@@ -49,6 +50,7 @@ my $load = sub {
 	}
 };
 
+app->config(version => slurp "$Bin/.ver");
 app->config(hypnotoad => {pid_file=>"$Bin/../.$basename", listen=>[split ',', $ENV{MOJO_LISTEN}||'https://*'], proxy=>$ENV{MOJO_REVERSE_PROXY}||1});
 helper json => sub {
 	my $self = shift;
@@ -113,7 +115,7 @@ __DATA__
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><%= $title %></title>
+<title>Tailer <%= config 'version' %></title>
 <link   href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" type="text/css" rel="stylesheet" media="all" />
 <link   href="/s/css/ui.jqgrid.css" rel="stylesheet" type="text/css" media="screen" />      
 <script  src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js" type="text/javascript"></script>
@@ -122,6 +124,7 @@ __DATA__
 <script  src="/s/js/jquery.jqGrid.min.js" type="text/javascript"></script>  
 <script  src="/s/js/jquery.json-2.3.min.js" type="text/javascript"></script>
 <style>
+    * {font-family: Verdana,Arial,sans-serif;font-size: 11px;}
     #loggedin {display:none}
     .link {cursor:pointer;color:blue;text-decoration:underline;}
 </style>
@@ -139,7 +142,7 @@ $(document).ready(function(){
 });
 </script>
 </head>  
-<body>   
+<body>
 <table id="list1" class="scroll"></table> 
 <div id="pager1" class="scroll" style="text-align:center;" />
 </body>
@@ -185,8 +188,8 @@ $("#list1").jqGrid({
         rownumbers: true,
         rownumWidth: 50,
         scroll: false,
-        rowNum: 10,
-        rowList: [10, 20, 50, 100, 500, 1000, 5000, 10000],
+        rowNum: 25,
+        rowList: [10, 25, 50, 100, 500, 1000, 5000, 10000],
         pager: '#pager1',
         viewrecords: true,
         height: "75\%",
